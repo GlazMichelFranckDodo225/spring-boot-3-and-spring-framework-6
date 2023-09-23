@@ -15,6 +15,7 @@ import java.util.Set;
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 @Table(name = "tbl_book")
 public class Book {
+    // AUTO == SEQUENCE for MySQL
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(nullable = false, length = 20)
@@ -29,5 +30,14 @@ public class Book {
     // Hibernate will automatically take the current Timestamp of the JVM
     @UpdateTimestamp
     private LocalDateTime lastUpdate;
+    @ManyToMany
+    // The link table
+    @JoinTable(
+            name = "author_book", // Name of the link table
+            // Referenced the "id" of the Book entity (Here)
+            joinColumns = @JoinColumn(name = "book_id"),
+            // Referenced the "id" of the Author entity
+            inverseJoinColumns = @JoinColumn(name = "author_id")
+    )
     private Set<Author> authors;
 }
